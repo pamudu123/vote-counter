@@ -1,0 +1,20 @@
+name: My Github Workflow
+on:
+  push:
+    branches:
+      - main
+
+env:
+  PROJECT_NAME: vote-counter
+  DEVELOPER_NAME: Pamudu Ranasinghe
+
+jobs:
+  myexamplejob:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Checkout the repo"
+      - name: Checkout Repo
+        uses: actions/checkout@v4
+      - run: printenv
+      - run: echo "this is the env ${{ env.PROJECT_NAME }} and ${{ env.DEVELOPER_NAME }} "
+      
