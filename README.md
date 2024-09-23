@@ -5,15 +5,15 @@ Detailed Explanation
 ![Medium Article](https://medium.com/@pamudu1111/automated-election-vote-counting-7b89900f7333)
 
 ### 1. Using ChatGPT Vision API to Process Ballot Papers
-![Vision API](resources\LLM_proocessing.png)
+![Vision API](resources/LLM_proocessing.png)
 
 ### 2. Process the Layout with OCR
-![Layout Processing](resources\LayoutParse.png)
-![Layout Processing LLM](resources\LayoutParseLLM.png)
+![Layout Processing](resources/LayoutParse.png)
+![Layout Processing LLM](resources/LayoutParseLLM.png)
 
 
 ### 3. Using Object Detection — YOLO
-![YOLO vote detection](resources\Yolo_vote_extraction.png)
+![YOLO vote detection](resources/Yolo_vote_extraction.png)
 
 ### 4. Vote Extraction Using Computer Vision
 
