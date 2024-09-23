@@ -6,7 +6,7 @@
 
 
 Detailed Explanation
-![Medium Article](https://medium.com/@pamudu1111/automated-election-vote-counting-7b89900f7333)
+[Medium Article](https://medium.com/@pamudu1111/automated-election-vote-counting-7b89900f7333)
 
 ### 1. Using ChatGPT Vision API to Process Ballot Papers
 ![Vision API](resources/LLM_proocessing.png)
