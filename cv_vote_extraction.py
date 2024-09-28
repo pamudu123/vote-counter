@@ -1,6 +1,8 @@
 import cv2
 import numpy as np
 import os
+import utils
+
 
 # Constants
 TEMPLATE_DIR = "templates"
@@ -17,10 +19,10 @@ LINE_COLOR = (36, 255, 12)
 # Utility class for image operations
 class ImageProcessor:
     def __init__(self, template_dir, threshold=THRESHOLD):
-        self.templates = self.load_templates(template_dir)
+        self.templates = self._load_templates(template_dir)
         self.threshold = threshold
 
-    def load_templates(self, template_dir):
+    def _load_templates(self, template_dir):
         """Load template images for symbol matching."""
         templates = {}
         for filename in os.listdir(template_dir):
@@ -118,7 +120,7 @@ def warp_perspective(image, threshold_image):
 
 def main():
     # Load and process the image
-    image_path = "vote_paper/vote_1.png"
+    image_path = "sample_ballot_papers/vote_5.png"
     img_resized, img_threshold, img_gray = process_image(image_path)
     
     # Warp perspective
@@ -139,35 +141,22 @@ def main():
         if img_row.shape[0] > 40 and img_row.shape[1] > 40:
             row += 1
             symbol, location, confidence = processor.identify_symbol(img_row)
-
-            # print(f"Row {row}: Symbol = {symbol}, Confidence = {confidence}")
             vote_dict[row] = symbol
-            # cv2.putText(img_row, f"{symbol} ({confidence})", (10, 10), cv2.FONT_HERSHEY_SIMPLEX, 0.9, (0, 255, 0), 2)
-            # cv2.imshow(f"Row {row}", img_row)
-            # cv2.waitKey(0)
+            print(f"Row {row}: {symbol}, {location}, {confidence}")
+
 
     # Display results
-    
     imageArray = ([img_resized, img_threshold, img_gray],
                 [img_warped, img_warped_bw, img_resized])
 
-    # LABELS FOR DISPLAY
-    lables = [["Original","Gray","Threshold"],
-                ["imgBlank", "imgBlank2", "imgBlank3"]]
-
-    import utils
-    stackedImage = utils.stackImages(imageArray, 0.6, lables)
+    stackedImage = utils.stackImages(imageArray, 0.6)
     cv2.imshow("Result",stackedImage)
 
     # SAVE IMAGE WHEN 's' key is pressed
     key = cv2.waitKey(0)
     if key == ord('q'):
-        # break 
-
         cv2.destroyAllWindows()
 
-        cv2.destroyAllWindows()
-        print(vote_dict)
 
 if __name__ == "__main__":
     main()

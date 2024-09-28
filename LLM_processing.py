@@ -40,7 +40,7 @@ class BallotAnalyzer:
     @staticmethod
     def _get_analysis_prompt() -> str:
         return """
-        Analyze the provided ballot paper image to determine the validity of the vote and extract the preference order. The output should be a structured JSON object containing the following details:
+        Analyze the provided ballot paper image to determine the validity of the vote and extract the preference order.
 
         Steps:
         1. Image Analysis:
@@ -63,7 +63,7 @@ class BallotAnalyzer:
 
         {
         "validity": true or false,
-        "explanation_for_validity": "Explanation for why the ballot is valid or invalid.",
+        "explanation_for_validity": "Explanation for why the ballot is valid or invalid. Add the extracted details on the ballot paper",
         "cross_or_numbering": true or false,
         "votes": {
             "1st_vote": {
@@ -113,23 +113,23 @@ class BallotAnalyzer:
         base64_image = self._encode_image(image_path)
         
         return self.client.chat.completions.create(
-            model = self.model,
-            response_model = BallotPaper,
-            messages = [
-                {
-                    "role": "system",
-                    "content": [{"type": "text", "text": self._get_analysis_prompt()}],
-                },
-                {
-                    "role": "user",
-                    "content": [{"type": "image_url", "image_url": {"url": f"data:image/jpeg;base64,{base64_image}"}}],
-                }
-            ],
-            max_tokens = 1000,
-        )
+                model = self.model,
+                response_model = BallotPaper,
+                messages = [
+                    {
+                        "role": "system",
+                        "content": [{"type": "text", "text": self._get_analysis_prompt()}],
+                    },
+                    {
+                        "role": "user",
+                        "content": [{"type": "image_url", "image_url": {"url": f"data:image/jpeg;base64,{base64_image}"}}],
+                    }
+                ],
+                max_tokens = 1000,
+                )
 
 def main():
-    image_path = "vote_paper/vote_2.png"
+    image_path = "sample_ballot_papers/vote_1.png"
     analyzer = BallotAnalyzer()
 
     # Analyze ballot

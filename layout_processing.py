@@ -5,6 +5,7 @@ from dotenv import load_dotenv
 from unstract.llmwhisperer.client import LLMWhispererClient, LLMWhispererClientException
 
 from vote_validation import VoteValidator
+
 # Constants
 VALID_VOTE_CHARACTERS = ['X', 'x']
 VALID_VOTE_NUMBERS = ['1', '2', '3']
@@ -16,25 +17,16 @@ CANDIDATE_NAMES = [
 ]
 NAME_END_POSITION = 20  # Assumed position where candidate name ends in the ballot line
 
-class PDFProcessor:
+class LayoutProcessor:
     """Handles the conversion of PDF documents to structured text."""
-
     def __init__(self):
         load_dotenv()
         api_key = os.getenv('LLMWHISPER_API_KEY')
         base_url = os.getenv('LLMWHISPER_BASE_URL')
         self.client = LLMWhispererClient(base_url=base_url, api_key=api_key, logging_level="INFO")
 
-    def pdf_to_structured_text(self, pdf_path: str) -> str:
-        """
-        Convert a PDF file to structured text using LLMWhisperer.
-
-        Args:
-            pdf_path (str): Path to the PDF file.
-
-        Returns:
-            str: Extracted text from the PDF, or an error message if conversion fails.
-        """
+    def img_to_structured_text(self, pdf_path: str) -> str:
+        """Convert a PDF file to structured text using LLMWhisperer."""
         try:
             result = self.client.whisper(
                 file_path=pdf_path,
@@ -49,19 +41,10 @@ class PDFProcessor:
             return f'PDF conversion failed with error: {e}'
 
 class VoteExtractor:
-    """Provides static methods for extracting votes and candidate names from text."""
-
+    """Extract votes and candidate names from text."""
     @staticmethod
     def extract_vote(line: str) -> Optional[str]:
-        """
-        Extract a valid vote from a line of text.
-
-        Args:
-            line (str): A line of text from the ballot.
-
-        Returns:
-            Optional[str]: The extracted vote if found, None otherwise.
-        """
+        """Extract a valid vote from a line of text."""
         line = line.replace('[X]', '')
         for char in line:
             if char in VALID_VOTES:
@@ -70,15 +53,7 @@ class VoteExtractor:
 
     @staticmethod
     def extract_candidate_name(text: str) -> Optional[str]:
-        """
-        Extract a candidate name from a line of text.
-
-        Args:
-            text (str): A line of text from the ballot.
-
-        Returns:
-            Optional[str]: The extracted candidate name if found, None otherwise.
-        """
+        """Extract a candidate name from a line of text."""
         processed_names = [''.join(name.split()).upper() for name in CANDIDATE_NAMES]
         processed_input = ''.join(text.split()).upper()
         for i, processed_name in enumerate(processed_names):
@@ -88,20 +63,13 @@ class VoteExtractor:
 
 class VotingSystem:
     """Orchestrates the entire voting process, from PDF processing to vote extraction."""
-
     def __init__(self, pdf_path: str):
-        self.pdf_processor = PDFProcessor()
+        self.pdf_processor = LayoutProcessor()
         self.pdf_path = pdf_path
 
     def process_votes(self) -> List[Dict[str, Optional[str]]]:
-        """
-        Process the votes from the PDF ballot.
-
-        Returns:
-            List[Dict[str, Optional[str]]]: A list of dictionaries containing
-            sheet position, candidate name, and vote for each ballot entry.
-        """
-        extracted_text = self.pdf_processor.pdf_to_structured_text(self.pdf_path)
+        """Process the votes from the PDF ballot."""
+        extracted_text = self.pdf_processor.img_to_structured_text(self.pdf_path)
         lines = [line.strip() for line in extracted_text.split('\n')]
         
         vote_dict = []
@@ -127,7 +95,7 @@ class VotingSystem:
         return vote_dict
 
 def main():
-    voting_system = VotingSystem('vote_paper/vote_4.png')
+    voting_system = VotingSystem('sample_ballot_papers/vote_1.png')
     votes = voting_system.process_votes()
     validator = VoteValidator(VALID_VOTE_CHARACTERS, VALID_VOTE_NUMBERS)
     
