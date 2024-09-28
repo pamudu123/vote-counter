@@ -14,10 +14,10 @@ OpenAI Vision API analyzes images of ballot papers, interprets the votes, and re
 <table>
   <tr>
     <td>
-      <img src="resources/LayoutParse.png" alt="Layout Processing" width="300"/>
+      <img src="resources/layout_parse.png" alt="Layout Processing" width="300"/>
     </td>
     <td>
-      <img src="resources/LayoutParseLLM.png" alt="Layout Processing LLM" width="300"/>
+      <img src="resources/layout_parse_LLM.png" alt="Layout Processing LLM" width="300"/>
     </td>
   </tr>
 </table>
@@ -25,7 +25,7 @@ OpenAI Vision API analyzes images of ballot papers, interprets the votes, and re
 Layout extraction technique followed by a rule-based/LLM approach to process and extract the details from the structured OCR text.
 
 ### 3. Using Object Detection — YOLO
-![YOLO vote detection](resources/Yolo_vote_extraction.png)
+![YOLO vote detection](resources/YOLO_vote_extraction.png)
 
 YOLO object detection model to extract details from the ballot paper.
 
