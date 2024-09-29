@@ -5,6 +5,8 @@ __pycache__/
 # pytorch model files
 *.pt
 
+*.pdf
+*pptx
 
 
 
